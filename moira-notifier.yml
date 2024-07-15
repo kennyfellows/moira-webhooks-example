@@ -1,0 +1,59 @@
+#See https://moira.readthedocs.io/en/latest/installation/configuration.html for config explanation
+redis:
+  addrs: "redis:6379"
+  metrics_ttl: 3h
+telemetry:
+  graphite:
+    enabled: true
+    runtime_stats: true
+    uri: "relay:2003"
+    prefix: moira
+    interval: 60s
+  pprof:
+    enabled: true
+  listen: ":8093"
+graphite_remote:
+  - cluster_id: default
+    cluster_name: Graphite 1
+    url: "http://graphite:80/render"
+    check_interval: 60s
+    timeout: 60s
+    metrics_ttl: 168h
+prometheus_remote:
+  - cluster_id: default
+    cluster_name: Prometheus 1
+    url: "http://prometheus:9090"
+    check_interval: 60s
+    timeout: 60s
+    metrics_ttl: 168h
+notifier:
+  sender_timeout: 10s
+  resending_timeout: "1:00"
+  senders:
+    - sender_type: webhook
+      contact_type: webhook
+      url: http://webhook-listener:3000/api/alarms
+  moira_selfstate:
+    enabled: false
+    remote_triggers_enabled: false
+    redis_disconect_delay: 60s
+    last_metric_received_delay: 120s
+    last_check_delay: 120s
+    last_remote_check_delay: 300s
+    notice_interval: 300s
+  front_uri: http://localhost
+  timezone: UTC
+  date_time_format: "15:04 02.01.2006"
+notification_history:
+  ttl: 48h
+  query_limit: 10000
+notification:
+  delayed_time: 1m
+  transaction_timeout: 100ms
+  transaction_max_retries: 10
+  transaction_heuristic_limit: 10000
+  resave_time: 30s
+log:
+  log_file: stdout
+  log_level: info
+  log_pretty_format: true

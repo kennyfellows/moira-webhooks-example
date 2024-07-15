@@ -1,0 +1,65 @@
+services:
+
+  webhook-listener:
+    build:
+      context: ./webhook-listener
+    restart: always
+    ports:
+      - "3000:3000"
+
+  # override moira services in order to use custom config files
+  api:
+    extends:
+      file: ./moira/docker-compose.yml
+      service: api
+    volumes:
+      - ./moira-api.yml:/etc/moira/api.yml
+  notifier:
+    extends:
+      file: ./moira/docker-compose.yml
+      service: notifier
+    volumes:
+      - ./moira-notifier.yml:/etc/moira/notifier.yml
+
+  # include other moira services that dont need to be changed
+  redis:
+    extends:
+      file: ./moira/docker-compose.yml
+      service: redis
+  graphite:
+    extends:
+      file: ./moira/docker-compose.yml
+      service: graphite
+  prometheus:
+    extends:
+      file: ./moira/docker-compose.yml
+      service: prometheus
+  prometheus_2:
+    extends:
+      file: ./moira/docker-compose.yml
+      service: prometheus_2
+  filter:
+    extends:
+      file: ./moira/docker-compose.yml
+      service: filter
+  checker:
+    extends:
+      file: ./moira/docker-compose.yml
+      service: checker
+  web:
+    extends:
+      file: ./moira/docker-compose.yml
+      service: web
+  balancer:
+    extends:
+      file: ./moira/docker-compose.yml
+      service: balancer
+  relay:
+    extends:
+      file: ./moira/docker-compose.yml
+      service: relay
+
+networks:
+  balancer:
+volumes:
+  data:

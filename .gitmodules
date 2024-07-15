@@ -1,0 +1,3 @@
+[submodule "moira"]
+	path = moira
+	url = git@github.com:moira-alert/moira.git
